@@ -1,0 +1,26 @@
+{
+  "name": "svelte-tryout",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "14.0.0",
+    "@rollup/plugin-html": "0.2.0",
+    "@rollup/plugin-node-resolve": "8.4.0",
+    "@rollup/plugin-typescript": "5.0.2",
+    "@tsconfig/svelte": "1.0.4",
+    "rollup": "^2.23.0",
+    "rollup-plugin-serve": "1.0.3",
+    "rollup-plugin-svelte": "5.2.3",
+    "svelte-preprocess": "4.0.9",
+    "tslib": "2.0.0",
+    "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "svelte": "^3.24.0"
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "extends": "@tsconfig/svelte",
+  "compilerOptions": {
+    "lib": ["es6", "dom"]
+  }
+}
