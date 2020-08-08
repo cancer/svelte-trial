@@ -1,9 +1,8 @@
 <script>
   import { onMount } from 'svelte';
 
-  import { login } from '../shared/login';
-  import { mapClasses } from '../shared/map-classes';
-  import { fetchBooks } from './fetch-books';
+  import { fetchBooks } from './home.usecase';
+  import type { Visibility } from './home.store';
   import {
     books,
     bookCount,
@@ -12,10 +11,8 @@
     isVisibleOnlyIgnored,
     isVisibleOnlyNotIgnored,
   } from './home.store';
-  import type { Visibility } from './home.store';
 
   onMount(async () => {
-    //await login();
     await fetchBooks();
   });
 
@@ -51,11 +48,9 @@
 </div>
 
 <ul
-  class={mapClasses({
-    '-all': $isVisibleAll,
-    '-onlyIgnored': $isVisibleOnlyIgnored,
-    '-notOnlyIgnored': $isVisibleOnlyNotIgnored,
-  })}
+  class:-all={$isVisibleAll}
+  class:-onlyIgnored={$isVisibleOnlyIgnored}
+  class:-notOnlyIgnored={$isVisibleOnlyNotIgnored}
 >
   {#each $books as book (book.asin)}
     <li class={`Books_Item ${book.ignored ? '-ignored' : ''}`}>
@@ -68,7 +63,10 @@
 </ul>
 
 <style lang="scss">
-  @import '~bulma/sass/utilities/_all';
+  $easing: ease-out !default;
+  $cyan: hsl(204, 71%, 53%) !default
+  $white-ter: hsl(0, 0%, 96%) !default
+  $yellow: hsl(48,  100%, 67%) !default
 
   .Books {
     display: grid;
