@@ -8,3 +8,8 @@
     <Home />
   </Route>
 </Router>
+
+<svelte:head>
+  <link rel="stylesheet" href="/bundle.css" />
+  <title>Kindle Pusher</title>
+</svelte:head>

@@ -1,11 +1,13 @@
-import svelte from 'rollup-plugin-svelte';
-import autoPreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import html from '@rollup/plugin-html';
-import serve from 'rollup-plugin-serve';
 import resolve, { DEFAULTS } from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
+import svelte from 'rollup-plugin-svelte';
+import serve from 'rollup-plugin-serve';
+import postcss from 'rollup-plugin-postcss';
 
+import autoPreprocess from 'svelte-preprocess';
+import postcssNested from 'postcss-nested';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -25,13 +27,16 @@ const config = {
   plugins: [
     svelte({
       dev: !production,
+      emitCss: true,
       css: (css) => {
         css.write('dist/bundle.css');
       },
       preprocess: autoPreprocess({
         defaults: {
           script: 'typescript',
-          css: 'scss',
+        },
+        postcss: {
+          plugins: [postcssNested()],
         },
       }),
     }),
@@ -39,6 +44,9 @@ const config = {
       browser: true,
       dedupe: ['svelte'],
       extensions: [...DEFAULTS.extensions, '.svelte'],
+    }),
+    postcss({
+      extract: true,
     }),
     commonjs(),
     typescript({ sourceMap: !production }),

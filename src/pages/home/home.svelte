@@ -2,11 +2,12 @@
   import { onMount } from 'svelte';
 
   import { fetchBooks } from './home.usecase';
-  import type { Visibility } from './home.store';
+  import type { VisibilityLiteral } from './home.store';
   import {
     books,
     bookCount,
     visibility,
+    Visibility,
     isVisibleAll,
     isVisibleOnlyIgnored,
     isVisibleOnlyNotIgnored,
@@ -16,38 +17,51 @@
     await fetchBooks();
   });
 
-  const changeVisibilityTo = (value: Visibility) => {
+  const changeVisibilityTo = (value: VisibilityLiteral) => {
     return () => {
       visibility.set(value);
     };
   };
 </script>
 
-<h2 class="title is-1">本棚</h2>
+<h2 class="title">本棚</h2>
 <h3 class="subtitle is-5">所持している本（全{$bookCount}冊）の一覧です。</h3>
 
 <div class="block">
-  <input
-    on:change|preventDefault={changeVisibilityTo('all')}
-    checked={$isVisibleAll}
-    type="radio"
-    value="all"
-  />
-  <input
-    on:change|preventDefault={changeVisibilityTo('onlyIgnored')}
-    checked={$isVisibleOnlyIgnored}
-    type="radio"
-    value="onlyIgnored"
-  />
-  <input
-    on:change|preventDefault={changeVisibilityTo('onlyNotIgnored')}
-    checked={$isVisibleOnlyNotIgnored}
-    type="radio"
-    value="onlyNotIgnored"
-  />
+  <label class="radio">
+    <input
+      on:change|preventDefault={changeVisibilityTo('all')}
+      bind:group={$visibility}
+      value={Visibility.All}
+      type="radio"
+    />
+    <span class="check" />
+    <span class="control-label">すべて</span>
+  </label>
+  <label class="radio">
+    <input
+      on:change|preventDefault={changeVisibilityTo('onlyIgnored')}
+      bind:group={$visibility}
+      value={Visibility.OnlyIgnored}
+      type="radio"
+    />
+    <span class="check" />
+    <span class="control-label">通知設定あり</span>
+  </label>
+  <label class="radio">
+    <input
+      on:change|preventDefault={changeVisibilityTo('onlyNotIgnored')}
+      bind:group={$visibility}
+      value={Visibility.OnlyNotIgnored}
+      type="radio"
+    />
+    <span class="check" />
+    <span class="control-label">通知設定なし</span>
+  </label>
 </div>
 
 <ul
+  class="Books"
   class:-all={$isVisibleAll}
   class:-onlyIgnored={$isVisibleOnlyIgnored}
   class:-notOnlyIgnored={$isVisibleOnlyNotIgnored}
@@ -62,36 +76,104 @@
   {/each}
 </ul>
 
-<style lang="scss">
-  $easing: ease-out !default;
-  $cyan: hsl(204, 71%, 53%) !default
-  $white-ter: hsl(0, 0%, 96%) !default
-  $yellow: hsl(48,  100%, 67%) !default
+<style>
+  .title {
+    color: #363636;
+    font-size: 3rem;
+    font-weight: 600;
+    line-height: 1.125;
+  }
+  .subtitle {
+    color: #4a4a4a;
+    font-size: 1.25rem;
+    font-weight: 400;
+    line-height: 1.25;
+    margin-bottom: 1.5rem;
+    margin-top: -1.25rem;
+  }
+  .block {
+    margin-bottom: 1.5rem;
+  }
+  .radio {
+    label& {
+      cursor: pointer;
+      line-height: 1.25;
+      position: relative;
+      outline: none;
+      display: inline-flex;
+      align-items: center;
+      user-select: none;
+    }
+    input[type='radio'] {
+      cursor: pointer;
+      vertical-align: baseline;
+      position: absolute;
+      left: 0;
+      opacity: 0;
+      outline: none;
+      z-index: -1;
 
+      &:checked + .check {
+        border-color: #00d1b2;
+        &:before {
+          transform: scale(0.5);
+        }
+      }
+    }
+    .check {
+      display: flex;
+      flex-shrink: 0;
+      position: relative;
+      cursor: pointer;
+      width: 1.25em;
+      height: 1.25em;
+      transition: background 150ms ease-out;
+      border-radius: 50%;
+      border: 2px solid #7a7a7a;
+      &:before {
+        content: '';
+        display: flex;
+        position: absolute;
+        left: 50%;
+        margin-left: calc(-1.25em / 2);
+        bottom: 50%;
+        margin-bottom: calc(-1.25em / 2);
+        width: 1.25em;
+        height: 1.25em;
+        transition: transform 150ms ease-out;
+        border-radius: 50%;
+        transform: scale(0);
+        background-color: #00d1b2;
+      }
+    }
+    .control-label {
+      padding-left: 0.5em;
+    }
+  }
   .Books {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
     gap: 15px;
     &_Item {
       position: relative;
-      transition: 0.5s filter $easing;
+      transition: 0.5s filter ease-out;
       &.-ignored {
         filter: grayscale(1);
         opacity: 0.8;
       }
-      // "通知設定あり"のみを表示：通知設定あり要素を表示
+      /* "通知設定あり"のみを表示：通知設定あり要素を表示 */
       .-notOnlyIgnored &:not(.-ignored) {
         display: block;
       }
-      // "通知設定あり"のみを表示：通知設定なし要素を非表示
+      /* "通知設定あり"のみを表示：通知設定なし要素を非表示 */
       .-notOnlyIgnored &.-ignored {
         display: none;
       }
-      // "通知設定なし"のみを表示：通知設定なし要素を表示
+      /* "通知設定なし"のみを表示：通知設定なし要素を表示 */
       .-onlyIgnored &.-ignored {
         display: block;
       }
-      // "通知設定なし"のみを表示：通知設定あり素を表示
+      /* "通知設定なし"のみを表示：通知設定あり素を表示 */
       .-onlyIgnored &:not(.-ignored) {
         display: none;
       }
@@ -99,7 +181,7 @@
     &_Link {
       display: block;
       &:hover {
-        color: $cyan;
+        color: hsl(204, 71%, 53%);
       }
     }
     &_Title {
@@ -113,7 +195,7 @@
       width: 100%;
       height: 150px;
       object-fit: cover;
-      background-color: $white-ter;
+      background-color: hsl(0, 0%, 96%);
     }
     &_Button {
       -webkit-appearance: none;
@@ -125,11 +207,11 @@
       padding: 0;
       border: 0;
       background: transparent;
-      color: $yellow;
+      color: hsl(48, 100%, 67%);
       cursor: pointer;
-      transition: 0.2s color $easing;
+      transition: 0.2s color ease-out;
       &:hover {
-        color: lighten($yellow, 20%);
+        color: lighten(hsl(48, 100%, 67%), 20%);
       }
       .icon {
         font-size: 20px;
