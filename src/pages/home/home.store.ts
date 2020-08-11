@@ -1,10 +1,10 @@
-import { derived, writable } from 'svelte/store';
-import type { Book } from '../../domains/book/book';
+import { derived, writable } from "svelte/store";
+import type { Book } from "../../domains/book/book";
 
 export const Visibility = {
-  All: 'all',
-  OnlyIgnored: 'onlyIgnored',
-  OnlyNotIgnored: 'onlyNotIgnored',
+  All: "all",
+  OnlyIgnored: "onlyIgnored",
+  OnlyNotIgnored: "onlyNotIgnored",
 } as const;
 
 export type VisibilityLiteral = typeof Visibility[keyof typeof Visibility];

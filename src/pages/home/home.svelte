@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
+  import { onMount } from "svelte";
 
-  import Dummy from '../dummy.svelte';
-  import { fetchBooks } from './home.usecase';
-  import type { VisibilityLiteral } from './home.store';
+  import Dummy from "../dummy.svelte";
+  import { fetchBooks } from "./home.usecase";
+  import { VisibilityLiteral } from "./home.store";
   import {
     books,
     bookCount,
@@ -12,7 +12,7 @@
     isVisibleAll,
     isVisibleOnlyIgnored,
     isVisibleOnlyNotIgnored,
-  } from './home.store';
+  } from "./home.store";
 
   onMount(async () => {
     await fetchBooks();
@@ -111,7 +111,7 @@
     }
   }
   .radio {
-    input[type='radio'] {
+    input[type="radio"] {
       cursor: pointer;
       vertical-align: baseline;
       position: absolute;
@@ -138,7 +138,7 @@
       border-radius: 50%;
       border: 2px solid #7a7a7a;
       &:before {
-        content: '';
+        content: "";
         display: flex;
         position: absolute;
         left: 50%;
