@@ -7,7 +7,6 @@ import serve from 'rollup-plugin-serve';
 import postcss from 'rollup-plugin-postcss';
 
 import autoPreprocess from 'svelte-preprocess';
-import postcssNested from 'postcss-nested';
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -34,9 +33,7 @@ const config = {
       preprocess: autoPreprocess({
         defaults: {
           script: 'typescript',
-        },
-        postcss: {
-          plugins: [postcssNested()],
+          style: 'scss',
         },
       }),
     }),

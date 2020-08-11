@@ -1,6 +1,7 @@
-<script>
+<script lang="ts">
   import { onMount } from 'svelte';
 
+  import Dummy from '../dummy.svelte';
   import { fetchBooks } from './home.usecase';
   import type { VisibilityLiteral } from './home.store';
   import {
@@ -60,6 +61,8 @@
   </label>
 </div>
 
+<input bind:value={$isVisibleAll} />
+
 <ul
   class="Books"
   class:-all={$isVisibleAll}
@@ -76,7 +79,9 @@
   {/each}
 </ul>
 
-<style>
+<Dummy />
+
+<style lang="scss">
   .title {
     color: #363636;
     font-size: 3rem;
@@ -94,8 +99,8 @@
   .block {
     margin-bottom: 1.5rem;
   }
-  .radio {
-    label& {
+  label {
+    .radio {
       cursor: pointer;
       line-height: 1.25;
       position: relative;
@@ -104,6 +109,8 @@
       align-items: center;
       user-select: none;
     }
+  }
+  .radio {
     input[type='radio'] {
       cursor: pointer;
       vertical-align: baseline;
