@@ -46,7 +46,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "svelte": "^3.24.0",
+    "svelte": "^3.49.0",
     "svelte-routing": "1.4.2"
   }
 }
